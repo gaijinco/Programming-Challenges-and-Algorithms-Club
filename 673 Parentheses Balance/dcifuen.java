@@ -14,7 +14,7 @@ public class Main {
 		for (int i = 0; i < totalStrings; i++) {
 			char[] line = sc.nextLine().toCharArray();
 			boolean isCorrect = true;
-			// Counter for the number of open "("
+			// Stack with "(" and "[" enqueued
 			Deque<Character> stack = new LinkedList<>();
 			for (int j = 0; j < line.length && isCorrect; j++) {
 				if (line[j] == '(' || line[j] == '[') {
@@ -23,6 +23,7 @@ public class Main {
 					if (stack.isEmpty()) {
 						isCorrect = false;
 					} else {
+						//Dequeue and check if correct
 						char lastChar = stack.removeFirst();
 						if ((line[j] == ')' && lastChar != '(')
 								|| (line[j] == ']' && lastChar != '[')) {
