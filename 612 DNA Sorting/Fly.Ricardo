@@ -1,0 +1,81 @@
+
+
+	/*Clase para almacenar atributos de la cadena DNA :
+	 * key : identificador unico de la entrada. Orden de entrada.
+	 * Este parametro asegura la restricción : "If two or more strings are equally sorted, 
+	 * list them in the same order they are in the input file."
+	 * value : Valor de sortedness de la cadena.
+	 * dataset : Cadena de entrada.
+	 *  */
+	class SetString implements Comparable<SetString>{
+		int key;
+		int value;
+		String dataset;
+		@Override
+		public int compareTo(SetString o) {
+			// TODO Auto-generated method stub
+			if(this.value - o.value != 0) return this.value - o.value;
+			return this.key - o.key;
+		}
+	}
+	
+
+	/*
+	 *Approach para obtener el "sortedness de la cadea.
+	 * Se recorre la cadena , comparando cada elemento , con sus consecutivos , 
+	 * y comparando si existe una tupla de elementos tal que : j > i && A(j) < A(i).
+	 */
+	static int getSortedness(String dataset){
+		char[] array = dataset.toCharArray();
+		int sortedness = 0;
+		for (int i = 0; i < array.length-1; i++) {
+			for (int j = i+1; j < array.length; j++) {
+				if(array[i]>array[j])	
+					sortedness++;	
+			}
+		}
+		return sortedness;
+	}
+	
+	/*
+	 * Modulo de lectura del archivo .in. Uso de la clase SetString.
+	 */
+	static ArrayList<SetString> readFile(BufferedReader br){
+		ArrayList<SetString> list = new ArrayList<SetString>();
+		DNA_Sorting dna_Sorting = new DNA_Sorting();
+		try {
+			String []n_m = br.readLine().split(" ")	;
+			for (int i = 0; i < Integer.parseInt(n_m[1]); i++) {
+				String line = br.readLine();
+				SetString tempST = dna_Sorting.new SetString(); 
+				tempST.key = i;
+				tempST.value = getSortedness(line);
+				tempST.dataset = line;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Collections.sort(list);
+		return list;
+	}
+	
+
+	/*
+	 * Inicio del procedimiento
+	 * */
+	public static void main(String[] args) {
+		ArrayList<SetString> list = DNA_Sorting.readFile(new BufferedReader(new InputStreamReader(System.in)));
+		for (SetString setString : list) {
+			System.out.println(setString.key);
+		}
+//		try {
+//			ArrayList<SetString> list = DNA_Sorting.readFile(new BufferedReader(new FileReader("TestFile.in")));
+//			for (SetString setString : list) {
+//				System.out.println(setString.dataset);
+//			}
+//		} catch (FileNotFoundException e) {
+//			//TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}	
+		System.out.close();
+	}
